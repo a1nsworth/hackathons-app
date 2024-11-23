@@ -1,0 +1,37 @@
+.wrapper {
+  width: 400px;
+  box-shadow: 0px 5px 10px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  transition: transform 1s ease;
+}
+
+.wrapper:hover {
+  transform: scale(1.1);
+}
+
+.content {
+  padding: 20px;
+}
+
+.name_container {
+  text-align: center;
+  height: 40px;
+  padding: 10px;
+  background: #1e4478;
+  border-radius: 20px 20px 0 0;
+}
+
+.name_container h1 {
+  color: white;
+  font-family: "Open Sans", sans-serif;
+}
+
+hr {
+  margin-top: 10px;
+  margin-bottom: 20px;
+}

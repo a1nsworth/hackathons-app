@@ -1,0 +1,18 @@
+.container {
+  margin: 0;
+  padding: 0;
+  background: #1e4478;
+  border-radius: 5px;
+  text-align: left;
+  padding: 17px 20px;
+}
+
+.container:hover {
+  background: #3f97fc;
+}
+
+.container p {
+  color: white;
+  font-size: 11px;
+  font-family: "Open Sans", sans-serif;
+}
