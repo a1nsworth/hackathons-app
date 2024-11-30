@@ -1,35 +1,35 @@
 .about_section {
-  padding: 2em 0; /* Отступы сверху и снизу */
+    padding: 2em 0; /* Отступы сверху и снизу */
 }
 
 .about_section .container {
-  max-width: 800px; /* Максимальная ширина контейнера */
-  margin: 0 auto; /* Центрирование контейнера */
-  padding: 10px 20px; /* Отступы по бокам */
+    max-width: 800px; /* Максимальная ширина контейнера */
+    margin: 0 auto; /* Центрирование контейнера */
+    padding: 10px 20px; /* Отступы по бокам */
 }
 
 .about_section h2 {
-  font-size: 2em; /* Размер заголовка */
-  color: #003366; /* Цвет заголовка */
-  margin-bottom: 1em; /* Отступ снизу */
+    font-size: 2em; /* Размер заголовка */
+    color: #003366; /* Цвет заголовка */
+    margin-bottom: 1em; /* Отступ снизу */
 }
 
 .about_section h3 {
-  font-size: 1.5em; /* Размер подзаголовка */
-  color: #003366; /* Цвет подзаголовка */
-  margin-top: 1.5em; /* Отступ сверху */
-  margin-bottom: 0.5em; /* Отступ снизу */
+    font-size: 1.5em; /* Размер подзаголовка */
+    color: #003366; /* Цвет подзаголовка */
+    margin-top: 1.5em; /* Отступ сверху */
+    margin-bottom: 0.5em; /* Отступ снизу */
 }
 
 .about_section p {
-  line-height: 1.6; /* Высота строки для лучшей читаемости */
-  margin-bottom: 1.5em; /* Отступ снизу */
+    line-height: 1.6; /* Высота строки для лучшей читаемости */
+    margin-bottom: 1.5em; /* Отступ снизу */
 }
 
 .about_section ul {
-  margin-left: 20px; /* Отступ слева для списка */
+    margin-left: 20px; /* Отступ слева для списка */
 }
 
 .about_section ul li {
-  margin-bottom: 0.5em; /* Отступ между элементами списка */
+    margin-bottom: 0.5em; /* Отступ между элементами списка */
 }
