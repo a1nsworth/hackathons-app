@@ -2,9 +2,11 @@ package app
 
 import (
 	_ "database/sql"
+	"fmt"
 	"log/slog"
 
 	httpHackathon "hackathons-app/internal/api/http/v1/hackathon"
+	httpUser "hackathons-app/internal/api/http/v1/user"
 	"hackathons-app/internal/config"
 	"hackathons-app/internal/db"
 	"hackathons-app/internal/models"
@@ -20,6 +22,7 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 // Run @title Go API
@@ -33,11 +36,12 @@ import (
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 // @host localhost:4242
 func Run() {
-	appConfig, gormConfig := config.GetConfig(".env"), gorm.Config{}
+	appConfig, gormConfig := config.GetConfig(".env"), gorm.Config{Logger: logger.Default.LogMode(logger.Info)}
 	baseLogger := log.NewLogger().With("app", "main")
 	bdLogger := baseLogger.With("component", "database")
 
 	dialector := postgres.Open(appConfig.DB.GetDsn())
+	fmt.Println("fsdafasfd")
 
 	gormDb, err := db.NewGormDatabase(dialector, &gormConfig)
 	if err != nil {
@@ -65,11 +69,13 @@ func Run() {
 	var (
 		userRepo         = repositories.NewUserRepository(gormDb)
 		hackathonRepo    = repositories.NewHackathonRepository(gormDb)
-		_                = services.NewUserService(userRepo)
+		userService      = services.NewUserService(userRepo, hackathonRepo)
 		hackathonService = services.NewHackathonService(hackathonRepo)
 		hackathonHandler = httpHackathon.NewHackathonHandler(hackathonService)
+		userHandler      = httpUser.NewUserHandler(userService)
 	)
 	httpHackathon.RegisterRouters(r, hackathonHandler)
+	httpUser.RegisterRouters(r, userHandler)
 
 	err = r.Run(appConfig.Server.GetURL())
 	if err != nil {

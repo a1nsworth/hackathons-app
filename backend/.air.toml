@@ -3,9 +3,9 @@ root = "."
 tmp_dir = "tmp"
 
 [build]
-cmd = "go build -o tmp/main ./cmd/server"
+cmd = "go build -o tmp/main ./cmd/server && make swag-gen"
 bin = "tmp/main"
-exclude_dir = ["assets", "tmp", "vendor"]
+exclude_dir = ["assets", "tmp", "vendor", "docs"]
 include_ext = ["go"]
 
 [log]
