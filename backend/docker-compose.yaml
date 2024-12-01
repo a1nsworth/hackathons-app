@@ -3,29 +3,44 @@ services:
   postgres:
     image: postgres:14
     environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: hackathon
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    env_file:
+      - .env
     ports:
-      - "5432:5432"
+      - "${DB_PORT}:${DB_PORT}"
+    networks:
+      - app-network
 
   # Сервис для Adminer (администрирование PostgreSQL через веб-интерфейс)
   adminer:
     image: adminer
     ports:
       - "8081:8080"
+    networks:
+      - app-network
 
-  app:
-    build: .
-    volumes:
-      - .:/app  # Монтируем исходный код
-    ports:
-      - "4242:4242"
-    command: air
-    depends_on:
-      - postgres
+
+#  app:
+#    build: .
+#    environment:
+#      - DB_HOST=postgres # TODO
+#    env_file:
+#      - .env
+#    volumes:
+#      - .:/app  # Монтируем исходный код
+#    ports:
+#      - "${SERVER_PORT}:${SERVER_PORT}"
+#    command: air
+#    depends_on:
+#      - postgres
 
 volumes:
   postgres_data:
+
+networks:
+  app-network:
+    driver: bridge

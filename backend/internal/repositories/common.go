@@ -1,11 +1,13 @@
 package repositories
 
-import "gorm.io/gorm"
+import (
+	"hackathons-app/internal/db"
+)
 
 type baseRepository struct {
-	db *gorm.DB
+	connection *db.GormDatabase
 }
 
-func newBaseRepository(db *gorm.DB) baseRepository {
-	return baseRepository{db: db}
+func newBaseRepository(gormDb *db.GormDatabase) baseRepository {
+	return baseRepository{connection: gormDb}
 }

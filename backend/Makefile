@@ -1,10 +1,5 @@
-SQLC_CONFIG_PATH=configs/sqlc.yaml
+swag-gen:
+	swag init --parseDependency --parseInternal -g ./internal/app/app.go -o ./docs
 
-generate:
-	@echo "Генерация кода с помощью sqlc..."
-	sqlc generate -f $(SQLC_CONFIG_PATH)
-
-clean:
-	@echo "Очистка сгенерированных файлов..."
-	rm -rf internal/db
-
+start-app:
+	air -c .air.toml

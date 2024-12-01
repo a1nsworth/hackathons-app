@@ -1,9 +1,8 @@
 package repositories
 
 import (
+	"hackathons-app/internal/db"
 	"hackathons-app/internal/models"
-
-	"gorm.io/gorm"
 )
 
 // UserRepository содержит базовый репозиторий для работы с пользователями
@@ -11,66 +10,66 @@ type UserRepository struct {
 	baseRepository
 }
 
-func NewUserRepository(db *gorm.DB) UserRepository {
-	return UserRepository{newBaseRepository(db)}
+func NewUserRepository(gormDb *db.GormDatabase) UserRepository {
+	return UserRepository{newBaseRepository(gormDb)}
 }
 
-// GetAllUsers - получение всех пользователей
-func (r UserRepository) GetAllUsers() ([]models.User, error) {
+// GetAll - получение всех пользователей
+func (r UserRepository) GetAll() ([]models.User, error) {
 	var users []models.User
-	err := r.db.Find(&users).Error
+	err := r.connection.GetDB().Find(&users).Error
 	return users, err
 }
 
-// GetAllUsersWithHackathons - получение всех пользователей с хакатонами
-func (r UserRepository) GetAllUsersWithHackathons() ([]models.User, error) {
+// GetAllWithHackathons - получение всех пользователей с хакатонами
+func (r UserRepository) GetAllWithHackathons() ([]models.User, error) {
 	var users []models.User
-	err := r.db.Preload("Hackathons").Find(&users).Error
+	err := r.connection.GetDB().Preload("Hackathons").Find(&users).Error
 	return users, err
 }
 
-// GetUserInfoById - получение пользователя по ID
-func (r UserRepository) GetUserInfoById(id int64) (models.User, error) {
+// GetById - получение пользователя по ID
+func (r UserRepository) GetById(id int64) (models.User, error) {
 	var user models.User
-	err := r.db.First(&user, id).Error
+	err := r.connection.GetDB().First(&user, id).Error
 	return user, err
 }
 
-// GetUserHackathonsById - получение хакатонов по ID пользователя
-func (r UserRepository) GetUserHackathonsById(id int64) ([]models.Hackathon, error) {
+// GetHackathonsById - получение хакатонов по ID пользователя
+func (r UserRepository) GetHackathonsById(id int64) ([]models.Hackathon, error) {
 	var hackathons []models.Hackathon
-	err := r.db.Preload("Users").Where("user_id = ?", id).Find(&hackathons).Error
+	err := r.connection.GetDB().Preload("Users").Where("user_id = ?", id).Find(&hackathons).Error
 	return hackathons, err
 }
 
-// GetUserWithHackathonsById - получение пользователя с хакатонами по ID
-func (r UserRepository) GetUserWithHackathonsById(id int64) (models.User, error) {
+// GetWithHackathonsById - получение пользователя с хакатонами по ID
+func (r UserRepository) GetWithHackathonsById(id int64) (models.User, error) {
 	var user models.User
-	err := r.db.Preload("Hackathons").First(&user, id).Error
+	err := r.connection.GetDB().Preload("Hackathons").First(&user, id).Error
 	return user, err
 }
 
-// CreateUser - создание нового пользователя
-func (r UserRepository) CreateUser(user *models.User) error {
-	return r.db.Create(&user).Error
+// Create - создание нового пользователя
+func (r UserRepository) Create(user *models.User) error {
+	return r.connection.GetDB().Create(&user).Error
 }
 
-// CreateUsers - создание нескольких пользователей
-func (r UserRepository) CreateUsers(users []*models.User) error {
-	return r.db.Create(&users).Error
+// CreateMany - создание нескольких пользователей
+func (r UserRepository) CreateMany(users []*models.User) error {
+	return r.connection.GetDB().Create(&users).Error
 }
 
-// UpdateUser - обновление данных пользователя
-func (r UserRepository) UpdateUser(user *models.User) error {
-	return r.db.Save(&user).Error
+// Update - обновление данных пользователя
+func (r UserRepository) Update(user *models.User) error {
+	return r.connection.GetDB().Save(&user).Error
 }
 
-// DeleteUserById - удаление пользователя по ID
-func (r UserRepository) DeleteUserById(id int64) error {
+// DeleteById - удаление пользователя по ID
+func (r UserRepository) DeleteById(id int64) error {
 	var user models.User
-	err := r.db.First(&user, id).Error
+	err := r.connection.GetDB().First(&user, id).Error
 	if err != nil {
 		return err
 	}
-	return r.db.Delete(&user).Error
+	return r.connection.GetDB().Delete(&user).Error
 }
