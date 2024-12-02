@@ -2,11 +2,26 @@
 root = "."
 tmp_dir = "tmp"
 
+[proxy]
+enable = true
+proxy_port = 3211
+add_port = 4242
+
 [build]
-cmd = "go build -o tmp/main ./cmd/server && make swag-gen"
+cmd = "make swag-gen && go build -o tmp/main ./cmd/server"
 bin = "tmp/main"
 exclude_dir = ["assets", "tmp", "vendor", "docs"]
-include_ext = ["go"]
+exclude_regex = ["_test\\.go"]
+include_ext = ["go", "html", "css", "md", "js"]
+rerun = true
+log = "air.log"
+
+[screen]
+clear_on_rebuild = true
+keep_scroll = true
 
 [log]
 time = true
+
+[misc]
+clean_on_exit = true

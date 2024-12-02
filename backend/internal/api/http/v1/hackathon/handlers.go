@@ -40,7 +40,7 @@ func (h *Handler) GetAll(c *gin.Context) {
 // GetById - хэндлер для получения хакатона по ID
 // @Summary Get hackathon by ID
 // @Description Получение хакатона по ID
-// @Tags hackathon
+// @Tags hackathons
 // @Accept json
 // @Produce json
 // @Param id path int true "Hackathon ID"
