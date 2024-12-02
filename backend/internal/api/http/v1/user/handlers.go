@@ -82,12 +82,14 @@ type CreateRequest struct {
 // CreateUser -
 // @Summary Create a new user
 // @Description   -
-// @Tags user
+// @Tags users
 // @Accept json
 // @Produce json
 // @Param user body CreateRequest true "User data"
 // @Success 201
+// @Security BearerAuth
 // @Router /user/ [put]
+// @title Gin Swagger Example API
 func (u *Handler) CreateUser(c *gin.Context) {
 	var request CreateRequest
 

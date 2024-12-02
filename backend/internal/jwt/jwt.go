@@ -1,6 +1,7 @@
 package jwt
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -34,19 +35,19 @@ func (p *Payload) CreateJwt(secret string, exp time.Duration) (string, error) {
 	return tokenString, nil
 }
 
-func (p *Payload) DecodeJwt(tokenString string, secret string) (*Payload, error) {
+func DecodeJwt(tokenString string, secret string) (*Payload, error) {
 	parsedToken, err := jwt.ParseWithClaims(
-		tokenString, &Payload{}, func(token *jwt.Token) (interface{}, error) {
+		tokenString, &Payload{}, func(token *jwt.Token) (any, error) {
 			return secret, nil
 		},
 	)
 	if err != nil {
-		return nil, nil
+		return nil, err
 	}
 
 	if claims, ok := parsedToken.Claims.(*Payload); ok && parsedToken.Valid {
 		return claims, nil
 	} else {
-		return nil, nil
+		return nil, fmt.Errorf("can`t parse token")
 	}
 }

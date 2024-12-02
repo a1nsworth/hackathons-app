@@ -35,6 +35,9 @@ import (
 // @license.name Apache 2.0
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 // @host localhost:4242
+// @securityDefinitions.apiKey BearerAuth
+// @in header
+// @name Authorization
 func Run() {
 	appConfig, gormConfig := config.GetConfig(".env"), gorm.Config{Logger: logger.Default.LogMode(logger.Info)}
 	baseLogger := log.NewLogger().With("app", "main")
