@@ -7,16 +7,16 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-type Role int
-
-const (
-	Admin Role = iota
-	User
-)
-
 type Payload struct {
 	jwt.RegisteredClaims
-	Role Role `json:"role"`
+}
+
+func NewPayload(subject string) *Payload {
+	return &Payload{
+		RegisteredClaims: jwt.RegisteredClaims{
+			Subject: subject,
+		},
+	}
 }
 
 func (p *Payload) CreateJwt(secret string, exp time.Duration) (string, error) {
@@ -37,8 +37,13 @@ func (p *Payload) CreateJwt(secret string, exp time.Duration) (string, error) {
 
 func DecodeJwt(tokenString string, secret string) (*Payload, error) {
 	parsedToken, err := jwt.ParseWithClaims(
-		tokenString, &Payload{}, func(token *jwt.Token) (any, error) {
-			return secret, nil
+		tokenString, &Payload{}, func(token *jwt.Token) (interface{}, error) {
+			// Проверяем, что используется ожидаемый метод подписи
+			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+				return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+			}
+			// Возвращаем ключ как []byte
+			return []byte(secret), nil
 		},
 	)
 	if err != nil {

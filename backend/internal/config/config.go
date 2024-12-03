@@ -37,6 +37,7 @@ type JWT struct {
 type Config struct {
 	Server Server
 	DB     DB
+	Jwt    JWT
 }
 
 func GetConfig(path string) (config Config) {

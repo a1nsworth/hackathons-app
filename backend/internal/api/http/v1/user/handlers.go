@@ -43,14 +43,16 @@ type ResponseWithHackathons struct {
 }
 
 // GetUserById - ID
-// @Summary Get user by ID
-// @Description   ID
-// @Tags user
-// @Accept json
-// @Produce json
-// @Param id path int true "User ID"
-// @Success 200 {object} Response
-// @Router /user/{id} [get]
+//
+//	@Summary		Get user by ID
+//	@Description	ID
+//	@Tags			user
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path	int	true	"User ID"
+//	@Security		BearerAuth
+//	@Success		200	{object}	Response
+//	@Router			/user/{id} [get]
 func (u *Handler) GetUserById(c *gin.Context) {
 	var request GetUserRequest
 
@@ -80,16 +82,17 @@ type CreateRequest struct {
 }
 
 // CreateUser -
-// @Summary Create a new user
-// @Description   -
-// @Tags users
-// @Accept json
-// @Produce json
-// @Param user body CreateRequest true "User data"
-// @Success 201
-// @Security BearerAuth
-// @Router /user/ [put]
-// @title Gin Swagger Example API
+//
+//	@Summary		Create a new user
+//	@Description	-
+//	@Tags			users
+//	@Accept			json
+//	@Produce		json
+//	@Param			user	body	CreateRequest	true	"User data"
+//	@Success		201
+//	@Security		BearerAuth
+//	@Router			/user/ [put]
+//	@title			Gin Swagger Example API
 func (u *Handler) CreateUser(c *gin.Context) {
 	var request CreateRequest
 
@@ -111,13 +114,15 @@ func (u *Handler) CreateUser(c *gin.Context) {
 }
 
 // GetAll -
-// @Summary Get all users
-// @Description   -
-// @Tags user
-// @Accept json
-// @Produce json
-// @Success 200 {array} Response
-// @Router /user/ [get]
+//
+//	@Summary		Get all users
+//	@Description	-
+//	@Tags			user
+//	@Accept			json
+//	@Produce		json
+//	@Security		BearerAuth
+//	@Success		200	{array}	Response
+//	@Router			/user/ [get]
 func (u *Handler) GetAll(c *gin.Context) {
 	users, err := u.service.GetAll()
 	response := make([]Response, len(users))
@@ -136,13 +141,15 @@ func (u *Handler) GetAll(c *gin.Context) {
 }
 
 // GetAllWithHackathons -
-// @Summary Get all users
-// @Description   -
-// @Tags user
-// @Accept json
-// @Produce json
-// @Success 200 {array} ResponseWithHackathons
-// @Router /user/hackathons/ [get]
+//
+//	@Summary		Get all users
+//	@Description	-
+//	@Tags			user
+//	@Accept			json
+//	@Produce		json
+//	@Security		BearerAuth
+//	@Success		200	{array}	ResponseWithHackathons
+//	@Router			/user/hackathons/ [get]
 func (u *Handler) GetAllWithHackathons(c *gin.Context) {
 	users, err := u.service.GetAllWithHackathons()
 	response := make([]ResponseWithHackathons, len(users))
@@ -170,14 +177,16 @@ func (u *Handler) GetAllWithHackathons(c *gin.Context) {
 }
 
 // DeleteUser -
-// @Summary Delete user by ID
-// @Description   ID
-// @Tags user
-// @Accept json
-// @Produce json
-// @Param id path int true "User ID"
-// @Success 204
-// @Router /user/{id} [delete]
+//
+//	@Summary		Delete user by ID
+//	@Description	ID
+//	@Tags			user
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path	int	true	"User ID"
+//	@Security		BearerAuth
+//	@Success		204
+//	@Router			/user/{id} [delete]
 func (u *Handler) DeleteUser(c *gin.Context) {
 	var request GetUserRequest
 
@@ -199,15 +208,17 @@ type AddHackathonRequest struct {
 }
 
 // AddHackathonById -
-// @Summary Add hackathon to user
-// @Description   ,    ID
-// @Tags user
-// @Accept json
-// @Produce json
-// @Param userId path int true "User ID"
-// @Param hackathonId path int true "Hackathon ID"
-// @Success 204
-// @Router /user/{userId}/{hackathonId} [patch]
+//
+//	@Summary		Add hackathon to user
+//	@Description	,    ID
+//	@Tags			user
+//	@Accept			json
+//	@Produce		json
+//	@Param			userId		path	int	true	"User ID"
+//	@Param			hackathonId	path	int	true	"Hackathon ID"
+//	@Security		BearerAuth
+//	@Success		204
+//	@Router			/user/{userId}/{hackathonId} [patch]
 func (u *Handler) AddHackathonById(c *gin.Context) {
 	var request AddHackathonRequest
 	if err := c.BindUri(&request); err != nil {

@@ -21,13 +21,14 @@ func NewHackathonHandler(service services.HackathonService) *Handler {
 }
 
 // GetAll - хэндлер для получения всех хакатонов
-// @Summary Get all hackathons
-// @Description Получение списка всех хакатонов
-// @Tags hackathons
-// @Accept json
-// @Produce json
-// @Success 200 {array} models.Hackathon
-// @Router /hackathons [get]
+//
+//	@Summary		Get all hackathons
+//	@Description	Получение списка всех хакатонов
+//	@Tags			hackathons
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{array}	models.Hackathon
+//	@Router			/hackathons [get]
 func (h *Handler) GetAll(c *gin.Context) {
 	hackathons, err := h.service.GetAll()
 	if err != nil {
@@ -38,14 +39,15 @@ func (h *Handler) GetAll(c *gin.Context) {
 }
 
 // GetById - хэндлер для получения хакатона по ID
-// @Summary Get hackathon by ID
-// @Description Получение хакатона по ID
-// @Tags hackathons
-// @Accept json
-// @Produce json
-// @Param id path int true "Hackathon ID"
-// @Success 200 {object} models.Hackathon
-// @Router /hackathons/{id} [get]
+//
+//	@Summary		Get hackathon by ID
+//	@Description	Получение хакатона по ID
+//	@Tags			hackathons
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		int	true	"Hackathon ID"
+//	@Success		200	{object}	models.Hackathon
+//	@Router			/hackathons/{id} [get]
 func (h *Handler) GetById(c *gin.Context) {
 	id, _ := strconv.ParseInt(c.Param("id"), 10, 64)
 	hackathon, err := h.service.GetById(id)
@@ -64,14 +66,15 @@ type CreateRequest struct {
 }
 
 // Create - хэндлер для создания нового хакатона
-// @Summary Create a new hackathon
-// @Description Создание нового хакатона
-// @Tags hackathons
-// @Accept json
-// @Produce json
-// @Param hackathon body CreateRequest true "Hackathon data"
-// @Success 201
-// @Router /hackathons [post]
+//
+//	@Summary		Create a new hackathon
+//	@Description	Создание нового хакатона
+//	@Tags			hackathons
+//	@Accept			json
+//	@Produce		json
+//	@Param			hackathon	body	CreateRequest	true	"Hackathon data"
+//	@Success		201
+//	@Router			/hackathons [post]
 func (h *Handler) Create(c *gin.Context) {
 	var request CreateRequest
 	if err := c.BindJSON(&request); err != nil {
@@ -91,15 +94,16 @@ func (h *Handler) Create(c *gin.Context) {
 }
 
 // Update - хэндлер для обновления хакатона
-// @Summary Update hackathon data
-// @Description Обновление данных хакатона
-// @Tags hackathons
-// @Accept json
-// @Produce json
-// @Param id path int true "Hackathon ID"
-// @Param hackathon body models.Hackathon true "Hackathon data"
-// @Success 200 {object} models.Hackathon
-// @Router /hackathons/{id} [put]
+//
+//	@Summary		Update hackathon data
+//	@Description	Обновление данных хакатона
+//	@Tags			hackathons
+//	@Accept			json
+//	@Produce		json
+//	@Param			id			path		int					true	"Hackathon ID"
+//	@Param			hackathon	body		models.Hackathon	true	"Hackathon data"
+//	@Success		200			{object}	models.Hackathon
+//	@Router			/hackathons/{id} [put]
 func (h *Handler) Update(c *gin.Context) {
 	var hackathon models.Hackathon
 	if err := c.ShouldBindJSON(&hackathon); err != nil {
@@ -114,13 +118,14 @@ func (h *Handler) Update(c *gin.Context) {
 }
 
 // DeleteById - хэндлер для удаления хакатона по ID
-// @Summary Delete hackathon by ID
-// @Description Удаление хакатона по ID
-// @Tags hackathons
-// @Accept json
-// @Produce json
-// @Param id path int true "Hackathon ID"
-// @Router /hackathons/{id} [delete]
+//
+//	@Summary		Delete hackathon by ID
+//	@Description	Удаление хакатона по ID
+//	@Tags			hackathons
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path	int	true	"Hackathon ID"
+//	@Router			/hackathons/{id} [delete]
 func (h *Handler) DeleteById(c *gin.Context) {
 	id, _ := strconv.ParseInt(c.Param("id"), 10, 64)
 	if err := h.service.DeleteById(id); err != nil {

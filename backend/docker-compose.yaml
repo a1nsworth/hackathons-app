@@ -1,4 +1,5 @@
 version: "3.8"
+
 services:
   postgres:
     image: postgres:14
@@ -24,19 +25,19 @@ services:
       - app-network
 
 
-#  app:
-#    build: .
-#    environment:
-#      - DB_HOST=postgres # TODO
-#    env_file:
-#      - .env
-#    volumes:
-#      - .:/app  # Монтируем исходный код
-#    ports:
-#      - "${SERVER_PORT}:${SERVER_PORT}"
-#    command: air
-#    depends_on:
-#      - postgres
+  app:
+    build: .
+    environment:
+      - DB_HOST=postgres
+    env_file:
+      - .env
+    volumes:
+      - .:/app  # Монтируем исходный код
+    ports:
+      - "${SERVER_PORT}:${SERVER_PORT}"
+    command: air
+    depends_on:
+      - postgres
 
 volumes:
   postgres_data:
