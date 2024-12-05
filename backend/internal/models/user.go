@@ -19,7 +19,3 @@ type User struct {
 	Role           Role        `gorm:"default:1"`
 	Hackathons     []Hackathon `gorm:"many2many:hackathons_users;"`
 }
-
-func a() Role {
-	return Role(1)
-}

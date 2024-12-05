@@ -85,7 +85,7 @@ type CreateRequest struct {
 //
 //	@Summary		Create a new user
 //	@Description	-
-//	@Tags			users
+//	@Tags			user
 //	@Accept			json
 //	@Produce		json
 //	@Param			user	body	CreateRequest	true	"User data"

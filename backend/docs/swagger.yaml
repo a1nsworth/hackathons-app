@@ -65,6 +65,16 @@ definitions:
       updatedAt:
         type: string
     type: object
+  internal_api_http_v1_auth.RefreshRequest:
+    properties:
+      access_token:
+        type: string
+      refresh_token:
+        type: string
+    required:
+    - access_token
+    - refresh_token
+    type: object
   internal_api_http_v1_auth.RegisterRequest:
     properties:
       email:
@@ -76,6 +86,11 @@ definitions:
       second_name:
         type: string
       verify_password:
+        type: string
+    type: object
+  internal_api_http_v1_auth.ResponseRefresh:
+    properties:
+      access_token:
         type: string
     type: object
   internal_api_http_v1_hackathon.CreateRequest:
@@ -136,13 +151,64 @@ info:
     email: support@swagger.io
     name: API Support
     url: http://www.swagger.io/support
-  description: Enter the token with the `Bearer ` prefix, e.g. "Bearer abcde12345".
+  description: This is a sample server.
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   termsOfService: http://swagger.io/terms/
   version: "1.0"
 paths:
+  /auth/refresh:
+    post:
+      consumes:
+      - application/json
+      description: This endpoint refreshes the access token using a valid refresh
+        token.
+      parameters:
+      - description: Request body containing access and refresh tokens
+        in: body
+        name: refreshRequest
+        required: true
+        schema:
+          $ref: '#/definitions/internal_api_http_v1_auth.RefreshRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_api_http_v1_auth.ResponseRefresh'
+        "400":
+          description: Invalid input or token issues
+        "401":
+          description: Access token is not expired
+        "500":
+          description: Internal server error
+      security:
+      - BearerAuth: []
+      summary: Refresh Access Token
+      tags:
+      - auth
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: .
+      parameters:
+      - description: User data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/internal_api_http_v1_auth.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+      summary: Register a new user
+      tags:
+      - auth
   /hackathons:
     get:
       consumes:
@@ -242,26 +308,6 @@ paths:
       summary: Update hackathon data
       tags:
       - hackathons
-  /register:
-    post:
-      consumes:
-      - application/json
-      description: .
-      parameters:
-      - description: User data
-        in: body
-        name: user
-        required: true
-        schema:
-          $ref: '#/definitions/internal_api_http_v1_auth.RegisterRequest'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Created
-      summary: Register a new user
-      tags:
-      - auth
   /user/:
     get:
       consumes:
@@ -390,4 +436,10 @@ paths:
       summary: Get all users
       tags:
       - user
+securityDefinitions:
+  BearerAuth:
+    description: Enter the token with the `Bearer ` prefix, e.g. "Bearer abcde12345".
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

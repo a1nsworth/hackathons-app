@@ -25,6 +25,6 @@ func NewAuth(log *slog.Logger, config config.JWT, user services.UserService) *Au
 func (a Auth) JWTAuthentication(token string) (*jwt.Payload, error) {
 	return jwt.DecodeJwt(
 		token,
-		a.config.Secret,
+		a.config.AccessSecret,
 	)
 }

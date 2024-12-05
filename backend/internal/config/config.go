@@ -30,8 +30,10 @@ func (db DB) GetDsn() string {
 }
 
 type JWT struct {
-	Secret string `env:"JWT_SECRET" env-required:"true"`
-	Exp    int    `env:"JWT_EXP" env-required:"true"`
+	AccessSecret  string `env:"JWT_ACCESS_SECRET" env-required:"true"`
+	RefreshSecret string `env:"JWT_REFRESH_SECRET" env-required:"true"`
+	AccessExp     int    `env:"JWT_ACCESS_EXP" env-required:"true"`
+	RefreshExp    int    `env:"JWT_REFRESH_EXP" env-required:"true"`
 }
 
 type Config struct {
