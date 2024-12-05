@@ -1,0 +1,393 @@
+definitions:
+  gorm.DeletedAt:
+    properties:
+      time:
+        type: string
+      valid:
+        description: Valid is true if Time is not NULL
+        type: boolean
+    type: object
+  hackathons-app_internal_models.Hackathon:
+    properties:
+      createdAt:
+        type: string
+      dateBegin:
+        type: string
+      dateEnd:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      updatedAt:
+        type: string
+      users:
+        items:
+          $ref: '#/definitions/hackathons-app_internal_models.User'
+        type: array
+    type: object
+  hackathons-app_internal_models.Role:
+    enum:
+    - 0
+    - 1
+    type: integer
+    x-enum-varnames:
+    - Admin
+    - Base
+  hackathons-app_internal_models.User:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      email:
+        type: string
+      firstName:
+        type: string
+      hackathons:
+        items:
+          $ref: '#/definitions/hackathons-app_internal_models.Hackathon'
+        type: array
+      hashedPassword:
+        type: string
+      id:
+        type: integer
+      role:
+        $ref: '#/definitions/hackathons-app_internal_models.Role'
+      secondName:
+        type: string
+      telegramID:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  internal_api_http_v1_auth.RegisterRequest:
+    properties:
+      email:
+        type: string
+      first_name:
+        type: string
+      password:
+        type: string
+      second_name:
+        type: string
+      verify_password:
+        type: string
+    type: object
+  internal_api_http_v1_hackathon.CreateRequest:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+    required:
+    - description
+    - name
+    type: object
+  internal_api_http_v1_user.CreateRequest:
+    properties:
+      email:
+        type: string
+      first_name:
+        type: string
+      second_name:
+        type: string
+    required:
+    - email
+    - first_name
+    - second_name
+    type: object
+  internal_api_http_v1_user.Response:
+    properties:
+      email:
+        type: string
+      first_name:
+        type: string
+      second_name:
+        type: string
+    type: object
+  internal_api_http_v1_user.ResponseHackathon:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+    type: object
+  internal_api_http_v1_user.ResponseWithHackathons:
+    properties:
+      email:
+        type: string
+      first_name:
+        type: string
+      hackathons:
+        items:
+          $ref: '#/definitions/internal_api_http_v1_user.ResponseHackathon'
+        type: array
+      second_name:
+        type: string
+    type: object
+host: localhost:4242
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: Enter the token with the `Bearer ` prefix, e.g. "Bearer abcde12345".
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  version: "1.0"
+paths:
+  /hackathons:
+    get:
+      consumes:
+      - application/json
+      description: Получение списка всех хакатонов
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/hackathons-app_internal_models.Hackathon'
+            type: array
+      summary: Get all hackathons
+      tags:
+      - hackathons
+    post:
+      consumes:
+      - application/json
+      description: Создание нового хакатона
+      parameters:
+      - description: Hackathon data
+        in: body
+        name: hackathon
+        required: true
+        schema:
+          $ref: '#/definitions/internal_api_http_v1_hackathon.CreateRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+      summary: Create a new hackathon
+      tags:
+      - hackathons
+  /hackathons/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Удаление хакатона по ID
+      parameters:
+      - description: Hackathon ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses: {}
+      summary: Delete hackathon by ID
+      tags:
+      - hackathons
+    get:
+      consumes:
+      - application/json
+      description: Получение хакатона по ID
+      parameters:
+      - description: Hackathon ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/hackathons-app_internal_models.Hackathon'
+      summary: Get hackathon by ID
+      tags:
+      - hackathons
+    put:
+      consumes:
+      - application/json
+      description: Обновление данных хакатона
+      parameters:
+      - description: Hackathon ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Hackathon data
+        in: body
+        name: hackathon
+        required: true
+        schema:
+          $ref: '#/definitions/hackathons-app_internal_models.Hackathon'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/hackathons-app_internal_models.Hackathon'
+      summary: Update hackathon data
+      tags:
+      - hackathons
+  /register:
+    post:
+      consumes:
+      - application/json
+      description: .
+      parameters:
+      - description: User data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/internal_api_http_v1_auth.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+      summary: Register a new user
+      tags:
+      - auth
+  /user/:
+    get:
+      consumes:
+      - application/json
+      description: '-'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/internal_api_http_v1_user.Response'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Get all users
+      tags:
+      - user
+    put:
+      consumes:
+      - application/json
+      description: '-'
+      parameters:
+      - description: User data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/internal_api_http_v1_user.CreateRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+      security:
+      - BearerAuth: []
+      summary: Create a new user
+      tags:
+      - users
+  /user/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+      security:
+      - BearerAuth: []
+      summary: Delete user by ID
+      tags:
+      - user
+    get:
+      consumes:
+      - application/json
+      description: ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_api_http_v1_user.Response'
+      security:
+      - BearerAuth: []
+      summary: Get user by ID
+      tags:
+      - user
+  /user/{userId}/{hackathonId}:
+    patch:
+      consumes:
+      - application/json
+      description: ',    ID'
+      parameters:
+      - description: User ID
+        in: path
+        name: userId
+        required: true
+        type: integer
+      - description: Hackathon ID
+        in: path
+        name: hackathonId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+      security:
+      - BearerAuth: []
+      summary: Add hackathon to user
+      tags:
+      - user
+  /user/hackathons/:
+    get:
+      consumes:
+      - application/json
+      description: '-'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/internal_api_http_v1_user.ResponseWithHackathons'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Get all users
+      tags:
+      - user
+swagger: "2.0"
