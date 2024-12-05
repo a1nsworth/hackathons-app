@@ -27,6 +27,7 @@ func NewHackathonHandler(service services.HackathonService) *Handler {
 //	@Tags			hackathons
 //	@Accept			json
 //	@Produce		json
+//	@Security		BearerAuth
 //	@Success		200	{array}	models.Hackathon
 //	@Router			/hackathons [get]
 func (h *Handler) GetAll(c *gin.Context) {
@@ -45,6 +46,7 @@ func (h *Handler) GetAll(c *gin.Context) {
 //	@Tags			hackathons
 //	@Accept			json
 //	@Produce		json
+//	@Security		BearerAuth
 //	@Param			id	path		int	true	"Hackathon ID"
 //	@Success		200	{object}	models.Hackathon
 //	@Router			/hackathons/{id} [get]
@@ -72,6 +74,7 @@ type CreateRequest struct {
 //	@Tags			hackathons
 //	@Accept			json
 //	@Produce		json
+//	@Security		BearerAuth
 //	@Param			hackathon	body	CreateRequest	true	"Hackathon data"
 //	@Success		201
 //	@Router			/hackathons [post]
@@ -100,6 +103,7 @@ func (h *Handler) Create(c *gin.Context) {
 //	@Tags			hackathons
 //	@Accept			json
 //	@Produce		json
+//	@Security		BearerAuth
 //	@Param			id			path		int					true	"Hackathon ID"
 //	@Param			hackathon	body		models.Hackathon	true	"Hackathon data"
 //	@Success		200			{object}	models.Hackathon
@@ -124,6 +128,7 @@ func (h *Handler) Update(c *gin.Context) {
 //	@Tags			hackathons
 //	@Accept			json
 //	@Produce		json
+//	@Security		BearerAuth
 //	@Param			id	path	int	true	"Hackathon ID"
 //	@Router			/hackathons/{id} [delete]
 func (h *Handler) DeleteById(c *gin.Context) {

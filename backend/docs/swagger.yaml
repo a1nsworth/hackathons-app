@@ -223,6 +223,8 @@ paths:
             items:
               $ref: '#/definitions/hackathons-app_internal_models.Hackathon'
             type: array
+      security:
+      - BearerAuth: []
       summary: Get all hackathons
       tags:
       - hackathons
@@ -242,6 +244,8 @@ paths:
       responses:
         "201":
           description: Created
+      security:
+      - BearerAuth: []
       summary: Create a new hackathon
       tags:
       - hackathons
@@ -259,6 +263,8 @@ paths:
       produces:
       - application/json
       responses: {}
+      security:
+      - BearerAuth: []
       summary: Delete hackathon by ID
       tags:
       - hackathons
@@ -279,6 +285,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/hackathons-app_internal_models.Hackathon'
+      security:
+      - BearerAuth: []
       summary: Get hackathon by ID
       tags:
       - hackathons
@@ -305,6 +313,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/hackathons-app_internal_models.Hackathon'
+      security:
+      - BearerAuth: []
       summary: Update hackathon data
       tags:
       - hackathons
@@ -312,7 +322,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: '-'
+      description: Возвращает список всех пользователей.
       produces:
       - application/json
       responses:
@@ -324,15 +334,15 @@ paths:
             type: array
       security:
       - BearerAuth: []
-      summary: Get all users
+      summary: Получить всех пользователей
       tags:
       - user
-    put:
+    post:
       consumes:
       - application/json
-      description: '-'
+      description: Создаёт нового пользователя в системе.
       parameters:
-      - description: User data
+      - description: Данные пользователя
         in: body
         name: user
         required: true
@@ -345,16 +355,16 @@ paths:
           description: Created
       security:
       - BearerAuth: []
-      summary: Create a new user
+      summary: Создать нового пользователя
       tags:
-      - users
+      - user
   /user/{id}:
     delete:
       consumes:
       - application/json
-      description: ID
+      description: Удаляет пользователя по заданному ID.
       parameters:
-      - description: User ID
+      - description: ID пользователя
         in: path
         name: id
         required: true
@@ -364,17 +374,24 @@ paths:
       responses:
         "204":
           description: No Content
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
       security:
       - BearerAuth: []
-      summary: Delete user by ID
+      - AdminRole: []
+      summary: Удалить пользователя по ID
       tags:
       - user
     get:
       consumes:
       - application/json
-      description: ID
+      description: Возвращает информацию о пользователе по заданному ID.
       parameters:
-      - description: User ID
+      - description: ID пользователя
         in: path
         name: id
         required: true
@@ -386,23 +403,29 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/internal_api_http_v1_user.Response'
+        "404":
+          description: User not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
       security:
       - BearerAuth: []
-      summary: Get user by ID
+      summary: Получить пользователя по ID
       tags:
       - user
   /user/{userId}/{hackathonId}:
     patch:
       consumes:
       - application/json
-      description: ',    ID'
+      description: Добавляет хакатон пользователю по ID.
       parameters:
-      - description: User ID
+      - description: ID пользователя
         in: path
         name: userId
         required: true
         type: integer
-      - description: Hackathon ID
+      - description: ID хакатона
         in: path
         name: hackathonId
         required: true
@@ -412,16 +435,22 @@ paths:
       responses:
         "204":
           description: No Content
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
       security:
       - BearerAuth: []
-      summary: Add hackathon to user
+      summary: Добавить хакатон пользователю
       tags:
       - user
   /user/hackathons/:
     get:
       consumes:
       - application/json
-      description: '-'
+      description: Возвращает список всех пользователей и их хакатонов.
       produces:
       - application/json
       responses:
@@ -433,7 +462,7 @@ paths:
             type: array
       security:
       - BearerAuth: []
-      summary: Get all users
+      summary: Получить всех пользователей с хакатонами
       tags:
       - user
 securityDefinitions:

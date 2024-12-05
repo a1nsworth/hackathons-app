@@ -105,6 +105,11 @@ const docTemplate = `{
         },
         "/hackathons": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Получение списка всех хакатонов",
                 "consumes": [
                     "application/json"
@@ -129,6 +134,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Создание нового хакатона",
                 "consumes": [
                     "application/json"
@@ -160,6 +170,11 @@ const docTemplate = `{
         },
         "/hackathons/{id}": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Получение хакатона по ID",
                 "consumes": [
                     "application/json"
@@ -190,6 +205,11 @@ const docTemplate = `{
                 }
             },
             "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Обновление данных хакатона",
                 "consumes": [
                     "application/json"
@@ -229,6 +249,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Удаление хакатона по ID",
                 "consumes": [
                     "application/json"
@@ -259,7 +284,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "-",
+                "description": "Возвращает список всех пользователей.",
                 "consumes": [
                     "application/json"
                 ],
@@ -269,7 +294,7 @@ const docTemplate = `{
                 "tags": [
                     "user"
                 ],
-                "summary": "Get all users",
+                "summary": "Получить всех пользователей",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -282,13 +307,13 @@ const docTemplate = `{
                     }
                 }
             },
-            "put": {
+            "post": {
                 "security": [
                     {
                         "BearerAuth": []
                     }
                 ],
-                "description": "-",
+                "description": "Создаёт нового пользователя в системе.",
                 "consumes": [
                     "application/json"
                 ],
@@ -296,12 +321,12 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "users"
+                    "user"
                 ],
-                "summary": "Create a new user",
+                "summary": "Создать нового пользователя",
                 "parameters": [
                     {
-                        "description": "User data",
+                        "description": "Данные пользователя",
                         "name": "user",
                         "in": "body",
                         "required": true,
@@ -324,7 +349,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "-",
+                "description": "Возвращает список всех пользователей и их хакатонов.",
                 "consumes": [
                     "application/json"
                 ],
@@ -334,7 +359,7 @@ const docTemplate = `{
                 "tags": [
                     "user"
                 ],
-                "summary": "Get all users",
+                "summary": "Получить всех пользователей с хакатонами",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -355,7 +380,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "ID",
+                "description": "Возвращает информацию о пользователе по заданному ID.",
                 "consumes": [
                     "application/json"
                 ],
@@ -365,11 +390,11 @@ const docTemplate = `{
                 "tags": [
                     "user"
                 ],
-                "summary": "Get user by ID",
+                "summary": "Получить пользователя по ID",
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "User ID",
+                        "description": "ID пользователя",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -381,6 +406,15 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/internal_api_http_v1_user.Response"
                         }
+                    },
+                    "404": {
+                        "description": "User not found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
                     }
                 }
             },
@@ -388,9 +422,12 @@ const docTemplate = `{
                 "security": [
                     {
                         "BearerAuth": []
+                    },
+                    {
+                        "AdminRole": []
                     }
                 ],
-                "description": "ID",
+                "description": "Удаляет пользователя по заданному ID.",
                 "consumes": [
                     "application/json"
                 ],
@@ -400,11 +437,11 @@ const docTemplate = `{
                 "tags": [
                     "user"
                 ],
-                "summary": "Delete user by ID",
+                "summary": "Удалить пользователя по ID",
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "User ID",
+                        "description": "ID пользователя",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -413,6 +450,15 @@ const docTemplate = `{
                 "responses": {
                     "204": {
                         "description": "No Content"
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
                     }
                 }
             }
@@ -424,7 +470,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": ",    ID",
+                "description": "Добавляет хакатон пользователю по ID.",
                 "consumes": [
                     "application/json"
                 ],
@@ -434,18 +480,18 @@ const docTemplate = `{
                 "tags": [
                     "user"
                 ],
-                "summary": "Add hackathon to user",
+                "summary": "Добавить хакатон пользователю",
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "User ID",
+                        "description": "ID пользователя",
                         "name": "userId",
                         "in": "path",
                         "required": true
                     },
                     {
                         "type": "integer",
-                        "description": "Hackathon ID",
+                        "description": "ID хакатона",
                         "name": "hackathonId",
                         "in": "path",
                         "required": true
@@ -454,6 +500,15 @@ const docTemplate = `{
                 "responses": {
                     "204": {
                         "description": "No Content"
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
                     }
                 }
             }

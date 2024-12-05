@@ -37,18 +37,19 @@ type ResponseRefresh struct {
 }
 
 // Refresh godoc
-// @Summary Refresh Access Token
-// @Description This endpoint refreshes the access token using a valid refresh token.
-// @Tags auth
-// @Accept json
-// @Produce json
-// @Param refreshRequest body RefreshRequest true "Request body containing access and refresh tokens"
-// @Success 200 {object} ResponseRefresh
-// @Security BearerAuth
-// @Failure 400 "Invalid input or token issues"
-// @Failure 401 "Access token is not expired"
-// @Failure 500 "Internal server error"
-// @Router /auth/refresh [post]
+//
+//	@Summary		Refresh Access Token
+//	@Description	This endpoint refreshes the access token using a valid refresh token.
+//	@Tags			auth
+//	@Accept			json
+//	@Produce		json
+//	@Param			refreshRequest	body		RefreshRequest	true	"Request body containing access and refresh tokens"
+//	@Success		200				{object}	ResponseRefresh
+//	@Security		BearerAuth
+//	@Failure		400	"Invalid input or token issues"
+//	@Failure		401	"Access token is not expired"
+//	@Failure		500	"Internal server error"
+//	@Router			/auth/refresh [post]
 func (h *Handler) Refresh(c *gin.Context) {
 	var request RefreshRequest
 	if err := c.ShouldBindJSON(&request); err != nil {

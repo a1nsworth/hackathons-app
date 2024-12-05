@@ -28,19 +28,19 @@ import (
 
 // Run @title Go API
 //
-//	@version						1.0
-//	@description					This is a sample server.
-//	@termsOfService					http://swagger.io/terms/
-//	@contact.name					API Support
-//	@contact.url					http://www.swagger.io/support
-//	@contact.email					support@swagger.io
-//	@license.name					Apache 2.0
-//	@license.url					http://www.apache.org/licenses/LICENSE-2.0.html
-//	@host							localhost:4242
-//	@securitydefinitions.apikey		BearerAuth
-//	@in								header
-//	@name							Authorization
-//	@description					Enter the token with the `Bearer ` prefix, e.g. "Bearer abcde12345".
+//	@version					1.0
+//	@description				This is a sample server.
+//	@termsOfService				http://swagger.io/terms/
+//	@contact.name				API Support
+//	@contact.url				http://www.swagger.io/support
+//	@contact.email				support@swagger.io
+//	@license.name				Apache 2.0
+//	@license.url				http://www.apache.org/licenses/LICENSE-2.0.html
+//	@host						localhost:4242
+//	@securitydefinitions.apikey	BearerAuth
+//	@in							header
+//	@name						Authorization
+//	@description				Enter the token with the `Bearer ` prefix, e.g. "Bearer abcde12345".
 func Run() {
 	appConfig, gormConfig := config.GetConfig(".env"), gorm.Config{Logger: logger.Default.LogMode(logger.Info)}
 	baseLogger := log.NewLogger().With("app", "main")
@@ -85,7 +85,7 @@ func Run() {
 		authHandler      = httpAuth.NewAuthHandler(userService, appConfig.Jwt)
 		userHandler      = httpUser.NewUserHandler(userService)
 	)
-	httpHackathon.RegisterRouters(r, hackathonHandler)
+	httpHackathon.RegisterRouters(r, hackathonHandler, auth)
 	httpUser.RegisterRouters(r, userHandler, auth)
 	httpAuth.RegisterRoutes(r, authHandler)
 

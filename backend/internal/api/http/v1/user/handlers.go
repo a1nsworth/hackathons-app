@@ -42,16 +42,17 @@ type ResponseWithHackathons struct {
 	Hackathons []ResponseHackathon `json:"hackathons"`
 }
 
-// GetUserById - ID
+// GetUserById - Получить пользователя по ID
 //
-//	@Summary		Get user by ID
-//	@Description	ID
+//	@Summary		Получить пользователя по ID
+//	@Description	Возвращает информацию о пользователе по заданному ID.
 //	@Tags			user
 //	@Accept			json
 //	@Produce		json
-//	@Param			id	path	int	true	"User ID"
+//	@Param			id	path	int	true	"ID пользователя"
 //	@Security		BearerAuth
 //	@Success		200	{object}	Response
+//	@Failure		404	{object}	map[string]string	"User not found"
 //	@Router			/user/{id} [get]
 func (u *Handler) GetUserById(c *gin.Context) {
 	var request GetUserRequest
@@ -81,18 +82,17 @@ type CreateRequest struct {
 	Email      string `json:"email" binding:"required"`
 }
 
-// CreateUser -
+// CreateUser - Создать нового пользователя
 //
-//	@Summary		Create a new user
-//	@Description	-
+//	@Summary		Создать нового пользователя
+//	@Description	Создаёт нового пользователя в системе.
 //	@Tags			user
 //	@Accept			json
 //	@Produce		json
-//	@Param			user	body	CreateRequest	true	"User data"
+//	@Param			user	body	CreateRequest	true	"Данные пользователя"
 //	@Success		201
 //	@Security		BearerAuth
-//	@Router			/user/ [put]
-//	@title			Gin Swagger Example API
+//	@Router			/user/ [post]
 func (u *Handler) CreateUser(c *gin.Context) {
 	var request CreateRequest
 
@@ -113,10 +113,10 @@ func (u *Handler) CreateUser(c *gin.Context) {
 	c.Status(http.StatusCreated)
 }
 
-// GetAll -
+// GetAll - Получить всех пользователей
 //
-//	@Summary		Get all users
-//	@Description	-
+//	@Summary		Получить всех пользователей
+//	@Description	Возвращает список всех пользователей.
 //	@Tags			user
 //	@Accept			json
 //	@Produce		json
@@ -140,10 +140,10 @@ func (u *Handler) GetAll(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-// GetAllWithHackathons -
+// GetAllWithHackathons - Получить всех пользователей с хакатонами
 //
-//	@Summary		Get all users
-//	@Description	-
+//	@Summary		Получить всех пользователей с хакатонами
+//	@Description	Возвращает список всех пользователей и их хакатонов.
 //	@Tags			user
 //	@Accept			json
 //	@Produce		json
@@ -176,16 +176,17 @@ func (u *Handler) GetAllWithHackathons(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-// DeleteUser -
+// DeleteUser - Удалить пользователя по ID
 //
-//	@Summary		Delete user by ID
-//	@Description	ID
+//	@Summary		Удалить пользователя по ID
+//	@Description	Удаляет пользователя по заданному ID.
 //	@Tags			user
 //	@Accept			json
 //	@Produce		json
-//	@Param			id	path	int	true	"User ID"
+//	@Param			id	path	int	true	"ID пользователя"
 //	@Security		BearerAuth
 //	@Success		204
+//	@Failure		500	{object}	map[string]string	"Internal Server Error"
 //	@Router			/user/{id} [delete]
 func (u *Handler) DeleteUser(c *gin.Context) {
 	var request GetUserRequest
@@ -207,17 +208,18 @@ type AddHackathonRequest struct {
 	UserId      int64 `uri:"userId" binding:"required"`
 }
 
-// AddHackathonById -
+// AddHackathonById - Добавить хакатон пользователю
 //
-//	@Summary		Add hackathon to user
-//	@Description	,    ID
+//	@Summary		Добавить хакатон пользователю
+//	@Description	Добавляет хакатон пользователю по ID.
 //	@Tags			user
 //	@Accept			json
 //	@Produce		json
-//	@Param			userId		path	int	true	"User ID"
-//	@Param			hackathonId	path	int	true	"Hackathon ID"
+//	@Param			userId		path	int	true	"ID пользователя"
+//	@Param			hackathonId	path	int	true	"ID хакатона"
 //	@Security		BearerAuth
 //	@Success		204
+//	@Failure		500	{object}	map[string]string	"Internal Server Error"
 //	@Router			/user/{userId}/{hackathonId} [patch]
 func (u *Handler) AddHackathonById(c *gin.Context) {
 	var request AddHackathonRequest
