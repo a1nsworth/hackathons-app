@@ -58,6 +58,7 @@ export const AuthProvider = ({children}: { children: ReactNode }) => {
             // После успешной регистрации сразу выполняем логин
             setAccessToken(response.data.accessToken);
             setRefreshToken(response.data.refreshToken);
+            setIsAuthenticated(true)
             localStorage.setItem('accessToken', response.data.accessToken);
             localStorage.setItem('refreshToken', response.data.refreshToken);
             setUser(response.data.user);
@@ -80,6 +81,7 @@ export const AuthProvider = ({children}: { children: ReactNode }) => {
         try {
             const response = await axios.post(AuthUrl.Refresh, {accessToken, refreshToken});
             console.log(response.data.accessToken);
+            setIsAuthenticated(true)
             setAccessToken(response.data.accessToken);
             localStorage.setItem('accessToken', response.data.accessToken);
         } catch (error) {

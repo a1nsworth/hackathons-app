@@ -1,13 +1,18 @@
+import React, {useState} from "react";
 import BaseForm, {BaseFormProps} from "./BaseForm";
-import {useState} from "react";
 import {useAuth} from "components/services/auth/AuthProvied";
+import {useNavigate} from "react-router-dom";
+import {toast, ToastContainer} from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Register() {
-    const {register} = useAuth()
+    const {register} = useAuth();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState<string | null>(null);
+    const [success, setSuccess] = useState<string | null>(null);
+    const navigate = useNavigate();
 
     const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(e.target.value);
@@ -23,36 +28,74 @@ export default function Register() {
 
     const handleSubmit = async () => {
         if (password !== confirmPassword) {
-            setError('Passwords do not match');
+            console.error("Passwords don't match");
+            toast.error('Пароли не совпадают', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+            setError('Пароли не совпадают');
             return;
         }
 
         try {
-            console.log('Registration data:', {email, password, confirmPassword});
-            await register(email, password, confirmPassword)
-            setError(null); // сбросить ошибку
+            await register(email, password, confirmPassword);
+            setError(null);
+            setSuccess('Регистрация прошла успешно!');
+
+            toast.success('Регистрация прошла успешно! Перенаправляем на страницу входа...', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+
+            setTimeout(() => navigate('/login'), 3000);
         } catch (err) {
             console.error('Registration failed', err);
+            setError('Ошибка регистрации. Попробуйте снова.');
+            setSuccess(null);
+
+            toast.error('Ошибка регистрации. Попробуйте снова.', {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
         }
     };
 
     const formData: BaseFormProps = {
-        title: "Register",
+        title: "Регистрация",
         inputs: [
-            {required: true, type: "email", placeholder: "Input email", value: email, onChange: handleEmailChange},
             {
                 required: true,
-                id: "password",
+                type: "email",
+                placeholder: "Введите email",
+                value: email,
+                onChange: handleEmailChange
+            },
+            {
+                required: true,
                 type: "password",
-                placeholder: "Input password",
+                placeholder: "Введите пароль",
                 value: password,
                 onChange: handlePasswordChange
             },
             {
                 required: true,
-                id: "conf-password",
                 type: "password",
-                placeholder: "Confirm password",
+                placeholder: "Подтвердите пароль",
                 value: confirmPassword,
                 onChange: handleConfirmPasswordChange
             },
@@ -64,8 +107,8 @@ export default function Register() {
 
     return (
         <>
-            {error && <p style={{color: 'red'}}>{error}</p>}
             <BaseForm props={formData} onSubmit={handleSubmit}/>
+            <ToastContainer/>
         </>
     );
 }
