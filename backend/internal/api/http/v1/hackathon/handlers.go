@@ -20,6 +20,15 @@ func NewHackathonHandler(service services.HackathonService) *Handler {
 	return &Handler{service: service}
 }
 
+type HackathonResponse struct {
+	Name        string `json:"name"`
+	Description string `json:"description"`
+}
+
+type GetAllResponse struct {
+	Hackathons []HackathonResponse `json:"hackathons"`
+}
+
 // GetAll - хэндлер для получения всех хакатонов
 //
 //	@Summary		Get all hackathons
@@ -28,15 +37,25 @@ func NewHackathonHandler(service services.HackathonService) *Handler {
 //	@Accept			json
 //	@Produce		json
 //	@Security		BearerAuth
-//	@Success		200	{array}	models.Hackathon
+//	@Success		200	{array} HackathonResponse
 //	@Router			/hackathons [get]
 func (h *Handler) GetAll(c *gin.Context) {
+
 	hackathons, err := h.service.GetAll()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, hackathons)
+	response := &GetAllResponse{Hackathons: make([]HackathonResponse, len(hackathons))}
+
+	for i, hackathon := range hackathons {
+		response.Hackathons[i] = HackathonResponse{
+			Name:        hackathon.Name,
+			Description: hackathon.Description,
+		}
+	}
+
+	c.JSON(http.StatusOK, response.Hackathons)
 }
 
 // GetById - хэндлер для получения хакатона по ID

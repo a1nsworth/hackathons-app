@@ -73,3 +73,8 @@ func (r UserRepository) DeleteById(id int64) error {
 	}
 	return r.connection.GetDB().Delete(&user).Error
 }
+
+func (r UserRepository) GetByEmail(email string) (user models.User, err error) {
+	err = r.connection.GetDB().Where("email = ?", email).First(&user).Error
+	return
+}

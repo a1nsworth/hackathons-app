@@ -65,18 +65,37 @@ definitions:
       updatedAt:
         type: string
     type: object
-  internal_api_http_v1_auth.RefreshRequest:
+  internal_api_http_v1_auth.LoginRequest:
     properties:
-      access_token:
+      email:
         type: string
-      refresh_token:
+      password:
         type: string
     required:
-    - access_token
-    - refresh_token
+    - email
+    - password
+    type: object
+  internal_api_http_v1_auth.LoginResponse:
+    properties:
+      accessToken:
+        type: string
+      refreshToken:
+        type: string
+    type: object
+  internal_api_http_v1_auth.RefreshRequest:
+    properties:
+      accessToken:
+        type: string
+      refreshToken:
+        type: string
+    required:
+    - accessToken
+    - refreshToken
     type: object
   internal_api_http_v1_auth.RegisterRequest:
     properties:
+      confirmPassword:
+        type: string
       email:
         type: string
       first_name:
@@ -85,12 +104,14 @@ definitions:
         type: string
       second_name:
         type: string
-      verify_password:
-        type: string
+    required:
+    - confirmPassword
+    - email
+    - password
     type: object
   internal_api_http_v1_auth.ResponseRefresh:
     properties:
-      access_token:
+      accessToken:
         type: string
     type: object
   internal_api_http_v1_hackathon.CreateRequest:
@@ -102,6 +123,13 @@ definitions:
     required:
     - description
     - name
+    type: object
+  internal_api_http_v1_hackathon.HackathonResponse:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
     type: object
   internal_api_http_v1_user.CreateRequest:
     properties:
@@ -158,6 +186,35 @@ info:
   termsOfService: http://swagger.io/terms/
   version: "1.0"
 paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Login a user using email and password and return access and refresh
+        tokens
+      parameters:
+      - description: Login credentials
+        in: body
+        name: loginRequest
+        required: true
+        schema:
+          $ref: '#/definitions/internal_api_http_v1_auth.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully logged in
+          schema:
+            $ref: '#/definitions/internal_api_http_v1_auth.LoginResponse'
+        "400":
+          description: Invalid input
+        "401":
+          description: Invalid password
+        "500":
+          description: Internal server error
+      summary: Login a user and return tokens
+      tags:
+      - auth
   /auth/refresh:
     post:
       consumes:
@@ -221,7 +278,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/hackathons-app_internal_models.Hackathon'
+              $ref: '#/definitions/internal_api_http_v1_hackathon.HackathonResponse'
             type: array
       security:
       - BearerAuth: []
@@ -382,7 +439,6 @@ paths:
             type: object
       security:
       - BearerAuth: []
-      - AdminRole: []
       summary: Удалить пользователя по ID
       tags:
       - user

@@ -3,6 +3,7 @@ package app
 import (
 	_ "database/sql"
 	"log/slog"
+	"time"
 
 	auth2 "hackathons-app/internal/api/http/v1/auth"
 	httpAuth "hackathons-app/internal/api/http/v1/auth"
@@ -18,6 +19,7 @@ import (
 
 	"hackathons-app/pkg/log"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -73,6 +75,31 @@ func Run() {
 	bdLogger.Info("Success Migrated database")
 
 	r := gin.Default()
+	r.Use(
+		cors.New(
+			cors.Config{
+				AllowOrigins: []string{
+					"http://localhost:3000",
+				},
+				AllowMethods: []string{
+					"GET",
+					"POST",
+					"PUT",
+					"DELETE",
+					"OPTIONS",
+				},
+				AllowHeaders: []string{
+					"Origin",
+					"Content-Type",
+					"Authorization",
+					"Accept",
+					"X-Requested-With",
+				},
+				AllowCredentials: true,           // Разрешить работу с куками
+				MaxAge:           12 * time.Hour, // Время жизни CORS заголовков
+			},
+		),
+	)
 	r.GET("/docs/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
 	var (

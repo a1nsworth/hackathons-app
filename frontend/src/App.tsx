@@ -1,12 +1,15 @@
-import { Header, Footer } from "components/layouts";
+import {Header, Footer} from "components/layouts";
 import Content from "components/Content";
+import {AuthProvider} from "./components/services/auth/AuthProvied";
 
 export default function App() {
-  return (
-    <div className="App">
-      <Header />
-      <Content />
-      <Footer />
-    </div>
-  );
+    return (
+        <AuthProvider>
+            <div className="App">
+                <Header/>
+                <Content/>
+                <Footer/>
+            </div>
+        </AuthProvider>
+    );
 }

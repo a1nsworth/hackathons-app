@@ -24,6 +24,49 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/auth/login": {
+            "post": {
+                "description": "Login a user using email and password and return access and refresh tokens",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Login a user and return tokens",
+                "parameters": [
+                    {
+                        "description": "Login credentials",
+                        "name": "loginRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_api_http_v1_auth.LoginRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully logged in",
+                        "schema": {
+                            "$ref": "#/definitions/internal_api_http_v1_auth.LoginResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "401": {
+                        "description": "Invalid password"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
         "/auth/refresh": {
             "post": {
                 "security": [
@@ -127,7 +170,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/hackathons-app_internal_models.Hackathon"
+                                "$ref": "#/definitions/internal_api_http_v1_hackathon.HackathonResponse"
                             }
                         }
                     }
@@ -422,9 +465,6 @@ const docTemplate = `{
                 "security": [
                     {
                         "BearerAuth": []
-                    },
-                    {
-                        "AdminRole": []
                     }
                 ],
                 "description": "Удаляет пользователя по заданному ID.",
@@ -614,24 +654,58 @@ const docTemplate = `{
                 }
             }
         },
+        "internal_api_http_v1_auth.LoginRequest": {
+            "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_api_http_v1_auth.LoginResponse": {
+            "type": "object",
+            "properties": {
+                "accessToken": {
+                    "type": "string"
+                },
+                "refreshToken": {
+                    "type": "string"
+                }
+            }
+        },
         "internal_api_http_v1_auth.RefreshRequest": {
             "type": "object",
             "required": [
-                "access_token",
-                "refresh_token"
+                "accessToken",
+                "refreshToken"
             ],
             "properties": {
-                "access_token": {
+                "accessToken": {
                     "type": "string"
                 },
-                "refresh_token": {
+                "refreshToken": {
                     "type": "string"
                 }
             }
         },
         "internal_api_http_v1_auth.RegisterRequest": {
             "type": "object",
+            "required": [
+                "confirmPassword",
+                "email",
+                "password"
+            ],
             "properties": {
+                "confirmPassword": {
+                    "type": "string"
+                },
                 "email": {
                     "type": "string"
                 },
@@ -643,16 +717,13 @@ const docTemplate = `{
                 },
                 "second_name": {
                     "type": "string"
-                },
-                "verify_password": {
-                    "type": "string"
                 }
             }
         },
         "internal_api_http_v1_auth.ResponseRefresh": {
             "type": "object",
             "properties": {
-                "access_token": {
+                "accessToken": {
                     "type": "string"
                 }
             }
@@ -663,6 +734,17 @@ const docTemplate = `{
                 "description",
                 "name"
             ],
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_api_http_v1_hackathon.HackathonResponse": {
+            "type": "object",
             "properties": {
                 "description": {
                     "type": "string"

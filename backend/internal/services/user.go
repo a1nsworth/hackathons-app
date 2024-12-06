@@ -37,6 +37,10 @@ func (s *UserService) GetById(id int64) (models.User, error) {
 	return s.userRepo.GetById(id)
 }
 
+func (s *UserService) GetByEmail(email string) (models.User, error) {
+	return s.userRepo.GetByEmail(email)
+}
+
 func (s *UserService) GetHackathonsById(id int64) ([]models.Hackathon, error) {
 	return s.userRepo.GetHackathonsById(id)
 }
